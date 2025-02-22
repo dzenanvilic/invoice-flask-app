@@ -26,7 +26,7 @@ def get_service_account_file_path():
         raise Exception("GOOGLE_CREDENTIALS environment variable not set.")
 
 # Configuration constants (adjust paths and credentials as needed)
-SERVICE_ACCOUNT_FILE = r"C:\webdriver\myinvoiceautomation-46a38fafc7de.json"
+SERVICE_ACCOUNT_FILE = get_service_account_file_path()
 SPREADSHEET_NAME = "WILLONA OMS"
 WORKSHEET_NAME = "Narudžbe"
 EXPECTED_HEADERS = [ 
