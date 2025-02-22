@@ -11,6 +11,20 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import os
+import tempfile
+
+def get_service_account_file_path():
+    credentials_json = os.environ.get("GOOGLE_CREDENTIALS")
+    if credentials_json:
+        # Write the JSON content to a temporary file and return its path
+        temp = tempfile.NamedTemporaryFile(delete=False, mode="w", suffix=".json")
+        temp.write(credentials_json)
+        temp.close()
+        return temp.name
+    else:
+        raise Exception("GOOGLE_CREDENTIALS environment variable not set.")
+
 # Configuration constants (adjust paths and credentials as needed)
 SERVICE_ACCOUNT_FILE = r"C:\webdriver\myinvoiceautomation-46a38fafc7de.json"
 SPREADSHEET_NAME = "WILLONA OMS"
