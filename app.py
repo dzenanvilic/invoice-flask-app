@@ -1,12 +1,12 @@
-import time
-import logging
 from flask import Flask, request, jsonify
+import logging
+import invoice_processor  # Import your Selenium module
+import os
 
 app = Flask(__name__)
-API_KEY = "1708990190042"  # Replace with a strong secret key
+API_KEY = os.environ.get("API_KEY", "1708990190042")
 processing = False
 
-# Configure logging to output INFO level messages
 logging.basicConfig(level=logging.INFO)
 
 def is_processing():
@@ -32,14 +32,17 @@ def trigger_invoice():
 
     set_processing(True)
     try:
-        app.logger.info("Starting invoice generation process...")
-        time.sleep(30)  # Simulated processing time
-        app.logger.info("Invoice generation process completed.")
+        app.logger.info("Starting invoice generation process via Selenium...")
+        result = invoice_processor.process_all_orders()  # Call your Selenium processing function
+        app.logger.info("Invoice generation process completed. Result: %s", result)
+    except Exception as e:
+        app.logger.error("Error during invoice generation: %s", e)
+        result = str(e)
     finally:
         set_processing(False)
 
-    app.logger.info("Sending success response.")
-    return jsonify({"result": "Invoice generated successfully"}), 200
+    app.logger.info("Sending response.")
+    return jsonify({"result": result}), 200
 
 if __name__ == '__main__':
     app.run()
